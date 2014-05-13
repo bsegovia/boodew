@@ -19,7 +19,6 @@ static void run(const char *str, bool fails=false) {
 IVAR(some_global, 10, 30, 50);
 
 int main(int argc, const char *argv[]) {
-
   // global variable
   run("echo ($ some_global)");
   run("var f [echo (* ($ 0)($ 0))]; ($ f) 3");
@@ -39,8 +38,7 @@ int main(int argc, const char *argv[]) {
   run("echo (do [loop i 16 [? (!= ($ i) 8) [echo ($ i)] [return (int (- ($ i) 1))]]])");
 
   // dynamic scoping
-  //run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope 3); (echo ($ in_upper_scope))");
-  //run("(var in_upper_scope 3); (echo ($ in_upper_scope))");
+  run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope 3); (echo ($ in_upper_scope))");
 
   // simple echo
   run("echo deded; echo er");
@@ -61,6 +59,7 @@ int main(int argc, const char *argv[]) {
   run("var bind [do [return [[@@($ 0) @@($ 1) ($ 0)]]]];"
       "var plus (($ bind) + 2);"
       "echo (int (do [return (($ plus) 3)]))");
+
   return 0;
 }
 

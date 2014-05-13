@@ -123,18 +123,20 @@ static string ex(const string &s, size_t curr) {
     }
 
     // try to call a builtin
-    if (tok.size() == 0) throw boodew_exception("missing identifer");
+    if (tok.size() == 0) return string();
     auto const it = unique<builtinmap>()->find(tok[0]);
 
-    // try a function call
-    if (it==unique<builtinmap>()->end()) {
-      if (unique<stack>()->size() > 1024)
-        throw boodew_exception(format("stack overflow with %s",tok[0].c_str()));
+    // try a builtin call
+    if (it!=unique<builtinmap>()->end())
+      ret = it->second(tok);
+    // we use fixed point to find literals on the fly!
+    else if (tok.size() == 1 && tok[0] == s) return s;
+    // this has to be a function call
+    else {
       scope frame;
       for (size_t i = 1; i < tok.size(); ++i) new_local(to_string(i-1),tok[i]);
       ret = ex(tok[0]);
-    } else
-      ret = it->second(tok);
+    }
   }
   return ret;
 }
