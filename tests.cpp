@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
   run("var i 4; echo [hop@(int ($ i))]");
 
   // delayed string substitution
-  run("var i 4; echo [hop@@($ i)]");
+  run("var i 4; echo [hop@[($ i)]");
   run("var i 4; echo [[hop@($ i)]]");
 
   // loop + control flow

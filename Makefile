@@ -21,5 +21,5 @@ tests: $(OBJS)
 	$(CXX) $(CXXFLAGS) -o tests $(OBJS) $(LIBS)
 
 clean:
-	rm -rf tests *.o *.d
+	rm -rf tests *.o *.d boodew.sdf boodew.opensdf boodew.vcxproj.user *.suo Debug
 

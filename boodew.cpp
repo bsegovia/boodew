@@ -44,18 +44,18 @@ const string &get(args arg, size_t idx) {
   if (arg.size() <= idx) throw boodew_exception("argument is missing");
   return arg[idx];
 }
+
+// builtins and global variables boiler plate
 typedef unordered_map<string, function<string(args)>> builtinmap;
 bool new_builtin(const string &n, const builtin_type &fn) {
   return unique<builtinmap>()->insert(make_pair(n,fn)), true;
 }
-
-// we wrap console global variables with builtins
 typedef unordered_map<string, function<string()>> cvar_map;
 bool new_cvar(const string &n, const cvar_type &f0, const builtin_type &f1) {
   return unique<cvar_map>()->insert(make_pair(n,f0)), new_builtin(n,f1);
 }
 
-// (scoped) local variables
+// local variables use dynamic scope
 typedef vector<unordered_map<string,string>> stack;
 static string new_local(const string &name, const string &value) {
   const auto s = unique<stack>();
@@ -92,10 +92,8 @@ static pair<string,size_t> expr(const string &s, char c, size_t curr) {
         ss << v.first;
         if (s[v.second]!=']'||opened!=1) ss << s[v.second];
         curr = v.second;
-      } else {
-        curr = next+1;
-        while (s[++next]=='@') ss << '@';
-      }
+      } else
+        do ss << s[curr = ++next]; while (s[next] == '@');
     } else
       opened += s[next] == c ? +1 : -1;
   }
@@ -122,17 +120,12 @@ static string ex(const string &s, size_t curr) {
       else curr=last+1;
     }
 
-    // try to call a builtin
     if (tok.size() == 0) return string();
     auto const it = unique<builtinmap>()->find(tok[0]);
-
-    // try a builtin call
-    if (it!=unique<builtinmap>()->end())
+    if (it!=unique<builtinmap>()->end()) // try to call a builtin
       ret = it->second(tok);
-    // we use fixed point to find literals on the fly!
-    else if (tok.size() == 1 && tok[0] == s) return s;
-    // this has to be a function call
-    else {
+    else if (tok.size() == 1 && tok[0] == s) return s; // literals
+    else { // function call
       scope frame;
       for (size_t i = 1; i < tok.size(); ++i) new_local(to_string(i-1),tok[i]);
       ret = ex(tok[0]);
@@ -147,7 +140,6 @@ static string while_builtin(args arg) {
   return last;
 }
 static string loop_builtin(args arg) {
-  scope frame;
   string last;
   auto const n = int(stod(get(arg,2)));
   for (int i = 0; i < n; ++i) {
@@ -161,7 +153,7 @@ O(+) O(-) O(/) O(*) O(==) O(!=) O(<) O(>) O(<=) O(>=)
 #undef O
 CMDL("int",[](args arg){return to_string(stoi(arg[1]));})
 CMDL("var",[](args arg){return new_local(get(arg,1),arg.size()<3?"0":get(arg,2));})
-CMDL("#", [](args){return "";})
+CMDL("#", [](args){return string();})
 CMDL("..", [](args arg){return get(arg,1)+get(arg,2);})
 CMDL("echo", [](args arg){cout<<get(arg,1);return get(arg,1);})
 CMDL("?", [](args arg){return stob(get(arg,1)) ? ex(get(arg,2)): ex(get(arg,3));})
