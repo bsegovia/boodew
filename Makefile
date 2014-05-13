@@ -6,7 +6,7 @@ CXXCOMMONFLAGS=-fno-rtti -std=c++11\
 DEBUGFLAGS=-O0 -DMEMORY_DEBUGGER -g
 OPTDEBUGFLAGS=-O2 -DMEMORY_DEBUGGER -g #-fsanitize=address
 RELEASEFLAGS=-fomit-frame-pointer -O3 -DNDEBUG -DRELEASE
-CXXFLAGS=$(CXXCOMMONFLAGS) $(FLAGS) $(RELEASEFLAGS) #-fsanitize=address
+CXXFLAGS=$(CXXCOMMONFLAGS) $(FLAGS) $(DEBUGFLAGS) #-fsanitize=address
 
 OBJS=boodew.o tests.o
 

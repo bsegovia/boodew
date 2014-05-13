@@ -8,7 +8,7 @@ using namespace std;
 static void run(const char *str, bool fails=false) {
   const auto r = boodew::exec(str);
   if (!r.second != fails)
-    cout << "FAILED";
+    cout << "FAILED with " << r.first;
   if (!fails)
     cout << endl;
   else
@@ -37,6 +37,10 @@ int main(int argc, const char *argv[]) {
   run("loop i 16 [? (< ($ i) 8) [echo ($ i)] [break]]");
   run("loop i 16 [? (< ($ i) 8) [echo ($ i)] [continue]]");
   run("echo (do [loop i 16 [? (!= ($ i) 8) [echo ($ i)] [return (int (- ($ i) 1))]]])");
+
+  // dynamic scoping
+  //run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope 3); (echo ($ in_upper_scope))");
+  //run("(var in_upper_scope 3); (echo ($ in_upper_scope))");
 
   // simple echo
   run("echo deded; echo er");
