@@ -47,7 +47,7 @@ easily done with the language.
 
 What next?
 ----------
-New builtins can be easily added to process arrays. One interesting would also
-to add a proper user-data value (on top of string, double and bool) to have
-really interesting patterns.
+New builtins can be easily added to process arrays. One interesting addition
+would also to add a proper user-data value (on top of string, double and bool)
+to have really interesting patterns.
 
