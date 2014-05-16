@@ -45,6 +45,11 @@ The code has been quickly tested with simple unit tests that you may find in
 'tests.cpp'. You will find that some constructs like function currying can
 easily done with the language.
 
+How to build
+------------
+The code was tested on linux with gcc 4.8.2 and clang 3.4. It was also tested
+sometime ago with vs2013. Build may break though since I did not test recently
+
 What next?
 ----------
 New builtins can be easily added to process arrays. One interesting addition
