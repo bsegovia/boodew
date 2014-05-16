@@ -38,6 +38,10 @@ int main(int argc, const char *argv[]) {
   run("loop i 16 [? (< ($ i) 8) [echo ($ i)] [continue]]");
   run("echo (do [loop i 16 [? (!= ($ i) 8) [echo ($ i)] [return (int (- ($ i) 1))]]])");
 
+  // more conditionals
+  run("var i 5; var hop salut; echo (? (< ($ i) 3) [do [return [@(echo ($ hop))]]])");
+  run("var i 5; var hop salut; echo (? (> ($ i) 3) [do [return [@(echo ($ hop))]]])");
+
   // dynamic scoping
   run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope 3); (echo ($ in_upper_scope))");
 

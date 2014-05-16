@@ -144,7 +144,7 @@ static value ex(const string &s, size_t curr) {
 }
 static value while_builtin(args arg) {
   value last;
-  while (vtob(ex(vtos(get(arg,1))))) try { return last=ex(vtos(get(arg,2))); }
+  while (vtob(ex(vtos(get(arg,1))))) try {return last=ex(vtos(get(arg,2))); }
     catch (bool b) { if (b) break; else continue; }
   return last;
 }
@@ -155,10 +155,13 @@ static value loop_builtin(args arg) {
     try {
       new_local(vtos(get(arg,1)), stov(to_string(i)));
       last = ex(vtos(get(arg,3)));
-    }
-    catch (bool b) { if (b) break; else continue; }
+    } catch (bool b) { if (b) break; else continue; }
   }
   return last;
+}
+static value if_builtin(args arg) {
+  return vtob(get(arg,1)) ? ex(vtos(get(arg,2))):
+    (arg.size()>3?ex(vtos(get(arg,3))):btov(false));
 }
 #define O(S)CMDL(#S,[](args arg){return dtov(vtod(get(arg,1)) S vtod(get(arg,2)));})
 O(+) O(-) O(/) O(*)
@@ -171,15 +174,14 @@ CMDL("var",[](args arg){return new_local(vtos(get(arg,1)),arg.size()<3?btov(fals
 CMDL("#", [](args){return btov(false);})
 CMDL("..", [](args arg){return stov(vtos(get(arg,1))+vtos(get(arg,2)));})
 CMDL("echo", [](args arg){cout<<vtos(get(arg,1));return get(arg,1);})
-CMDL("?", [](args arg){return vtob(get(arg,1)) ? ex(vtos(get(arg,2))): ex(vtos(get(arg,3)));})
 CMDL("return", [](args arg)->value {throw get(arg,1);})
 CMDL("do", [](args arg){try {return ex(vtos(get(arg,1)));} catch (value v) {return v;}})
 CMDL("break", [](args arg)->value {throw true;})
 CMDL("continue", [](args arg)->value {throw false;})
 CMDN("while", while_builtin)
 CMDN("loop", loop_builtin)
+CMDN("?", if_builtin)
 CMDN("$", getvar)
-
 pair<string,bool> exec(const string &s) {
   try {ex(s); return make_pair("",true);}
   catch (const boodew_exception &e) {return make_pair(string(e.what()),false);}
