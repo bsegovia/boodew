@@ -1,7 +1,7 @@
 Boodew
 ======
 
-Public domain lisp/cube-script inspired, dynamically scoped, functional and very
+Public domain lisp-like cube-script-inspired, dynamically scoped, functional and very
 slow language based on string evaluation and string substitution.
 
 This is a variant of the scripting language used in sauerbraten

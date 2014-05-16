@@ -18,7 +18,7 @@ all: tests
 -include $(OBJS:.o=.d)
 
 tests: $(OBJS)
-	$(CXX) $(CXXFLAGS) -o tests $(OBJS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -o tests $(OBJS) $(LIBS) -lstdc++
 
 clean:
 	rm -rf tests *.o *.d boodew.sdf boodew.opensdf boodew.vcxproj.user *.suo Debug
