@@ -27,6 +27,7 @@ int main(int argc, const char *argv[]) {
   // string substitution
   run("var i; echo [hop@($ i)]");
   run("var i 4; echo [hop@(int ($ i))]");
+  run("var str [[bla @(.. [echo] [ 4])]]; echo ($ str)");
 
   // delayed string substitution
   run("var i 4; echo [hop@[($ i)]");
