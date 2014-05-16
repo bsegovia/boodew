@@ -167,7 +167,7 @@ O(+) O(-) O(/) O(*)
 O(==) O(!=) O(<) O(>) O(<=) O(>=)
 #undef O
 CMDL("int",[](args arg){return stov(to_string(int(vtod(get(arg,1)))));})
-CMDL("var",[](args arg){return new_local(vtos(get(arg,1)),arg.size()<3?stov("0"):get(arg,2));})
+CMDL("var",[](args arg){return new_local(vtos(get(arg,1)),arg.size()<3?btov(false):get(arg,2));})
 CMDL("#", [](args){return btov(false);})
 CMDL("..", [](args arg){return stov(vtos(get(arg,1))+vtos(get(arg,2)));})
 CMDL("echo", [](args arg){cout<<vtos(get(arg,1));return get(arg,1);})
