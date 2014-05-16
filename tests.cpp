@@ -43,7 +43,7 @@ int main(int argc, const char *argv[]) {
   run("var i 5; var hop salut; echo (? (> ($ i) 3) [do [return [@(echo ($ hop))]]])");
 
   // dynamic scoping
-  run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope 3); (echo ($ in_upper_scope))");
+  run("var fn [echo ($ in_upper_scope)]; (var in_upper_scope bim); ($ fn)");
 
   // simple echo
   run("echo deded; echo er");
