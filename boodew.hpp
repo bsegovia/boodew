@@ -11,16 +11,30 @@
 
 namespace boodew {
 
+struct value {
+  enum kind {STR,DOUBLE,BOOL};
+  std::string s;
+  double d;
+  bool b;
+  kind k;
+};
+inline value stov(const std::string &s) {return {s,0.0,false,value::STR};}
+inline value dtov(double d) {return {"",d,false,value::DOUBLE};}
+inline value btov(bool b) {return {"",0.0,b,value::BOOL};}
+std::string vtos(const value &v);
+double vtod(const value &v);
+bool vtob(const value &v);
+
 // functions and builtins can have a variable number of arguments
-typedef const std::vector<std::string> &args;
-typedef std::function<std::string(args)> builtin_type;
-typedef std::function<std::string()> cvar_type;
+typedef const std::vector<value> &args;
+typedef std::function<value(args)> builtin_type;
+typedef std::function<value()> cvar_type;
 
 // format string helper
 std::string format(const char *fmt, ...);
 
 // extract the argument with extra checks
-const std::string &get(args arg, size_t idx);
+const value &get(args arg, size_t idx);
 
 // append a new builtin in the (global and shared) boodew context
 bool new_builtin(const std::string&, const builtin_type&);
@@ -35,13 +49,13 @@ bool new_cvar(const std::string&, const cvar_type&, const builtin_type&);
 
 // helper macros to do at pre-main (integer value here)
 #define IVAR(N,MIN,CURR,MAX) int N = CURR;\
-  static auto BDW_JOIN(cvar,__COUNTER__) =\
-    boodew::new_cvar(#N,[](){return std::to_string(N);}, [](boodew::args arg) {\
-      const auto x = std::stoi(boodew::get(arg,1));\
-      if (x>=MIN && x<=MAX) N=x;\
-      else std::cerr<<boodew::format("range for %s is (%d,%d)",#N,MIN,MAX)<<std::endl;\
-      return boodew::get(arg,1);\
-    });
+static auto BDW_JOIN(cvar,__COUNTER__) =\
+  boodew::new_cvar(#N,[](){return boodew::dtov(N);}, [](boodew::args arg) {\
+    const auto x = int(vtod(boodew::get(arg,1)));\
+    if (x>=MIN && x<=MAX) N=x;\
+    else std::cerr<<boodew::format("range for %s is (%d,%d)",#N,MIN,MAX)<<std::endl;\
+    return boodew::get(arg,1);\
+  });
 std::pair<std::string,bool> exec(const std::string&);
 } // namespace boodew
 
