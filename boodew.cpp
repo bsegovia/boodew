@@ -174,6 +174,7 @@ CMDL("var",[](args arg){return new_local(vtos(get(arg,1)),arg.size()<3?btov(fals
 CMDL("#", [](args){return btov(false);})
 CMDL("..", [](args arg){return stov(vtos(get(arg,1))+vtos(get(arg,2)));})
 CMDL("echo", [](args arg){cout<<vtos(get(arg,1));return get(arg,1);})
+CMDL("^", [](args arg){return get(arg,1);})
 CMDL("return", [](args arg)->value {throw get(arg,1);})
 CMDL("do", [](args arg){try {return ex(vtos(get(arg,1)));} catch (value v) {return v;}})
 CMDL("break", [](args arg)->value {throw true;})

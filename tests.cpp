@@ -28,9 +28,11 @@ int main(int argc, const char *argv[]) {
   run("var i; echo [hop@($ i)]");
   run("var i 4; echo [hop@(int ($ i))]");
   run("var str [[bla @(.. [echo] [ 4])]]; echo ($ str)");
+  run("var str [[bla @(.. [echo] [ 4])]]; (($ str))");
 
   // delayed string substitution
   run("var i 4; echo [hop@[($ i)]");
+  run("var i 4; echo [hop@@($ i)]");
   run("var i 4; echo [[hop@($ i)]]");
 
   // loop + control flow
@@ -64,7 +66,9 @@ int main(int argc, const char *argv[]) {
   run("var bind [do [return [[@@($ 0) @@($ 1) ($ 0)]]]];"
       "var plus (($ bind) + 2);"
       "echo (int (do [return (($ plus) 3)]))");
-
+  run("var bind [^ [[@@($ 0) @@($ 1) ($ 0)]]];"
+      "var plus (($ bind) + 2);"
+      "echo (int (do [return (($ plus) 3)]))");
   return 0;
 }
 
