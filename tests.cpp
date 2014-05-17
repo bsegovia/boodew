@@ -69,6 +69,9 @@ int main(int argc, const char *argv[]) {
   run("var bind [^ [[@@($ 0) @@($ 1) ($ 0)]]];"
       "var plus (($ bind) + 2);"
       "echo (int (do [return (($ plus) 3)]))");
+  run("var bind [^ [[@@($ 0) @@($ 1) ($ 0)]]];"
+      "var plus (($ bind) + 2);"
+      "echo ((($ plus) 3))");
   return 0;
 }
 
