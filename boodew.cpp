@@ -101,12 +101,13 @@ static pair<value,size_t> expr(const string &s, char c, size_t curr) {
         ss << vtos(v.first);
         if (s[v.second]!=']'||opened!=1) ss << s[v.second];
         curr = v.second;
+        next = curr > 0 ? curr-1 : 0;
       } else
         do ss << s[curr = ++next]; while (s[next] == '@');
     } else
       opened += s[next] == c ? +1 : -1;
   }
-  ss << s.substr(curr+1, next-curr-1);
+  if (next>curr) ss << s.substr(curr+1, next-curr-1);
   return make_pair((c=='[' ? stov(ss.str()) : ex(ss.str())), next+1);
 }
 static value ex(const string &s, size_t curr) {
